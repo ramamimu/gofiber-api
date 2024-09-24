@@ -80,12 +80,12 @@ func (s *ThreadHttpHandlerSuite) TestCreateNewThread() {
 	s.NotNil(bodyString)
 	s.NotEmpty(bodyString)
 
-	var positiveResponseType handler.PositiveResponseType
-	err = json.Unmarshal(bodyString, &positiveResponseType)
+	var ResponseType handler.ResponseType
+	err = json.Unmarshal(bodyString, &ResponseType)
 	s.Nil(err)
-	s.Equal(fiber.StatusCreated, positiveResponseType.Status)
-	s.Equal("success create thread", positiveResponseType.Message)
-	s.Nil(positiveResponseType.Data)
+	s.Equal(fiber.StatusCreated, ResponseType.Status)
+	s.Equal("success create thread", ResponseType.Message)
+	s.Nil(ResponseType.Data)
 
 	thread, err := s.Db.GetThreadByID("0")
 	s.Nil(err)
@@ -115,7 +115,7 @@ func (s *ThreadHttpHandlerSuite) TestGetThreads() {
 	s.NotNil(bodyString)
 	s.NotEmpty(bodyString)
 
-	var positiveResponse handler.PositiveResponseType
+	var positiveResponse handler.ResponseType
 	err = json.Unmarshal(bodyString, &positiveResponse)
 	s.NoError(err)
 	s.Equal(fiber.StatusOK, positiveResponse.Status)
@@ -160,7 +160,7 @@ func (s *ThreadHttpHandlerSuite) TestEditThread() {
 	s.NotNil(bodyString)
 	s.NotEmpty(bodyString)
 
-	var positiveResponse handler.PositiveResponseType
+	var positiveResponse handler.ResponseType
 	err = json.Unmarshal(bodyString, &positiveResponse)
 	s.NoError(err)
 	s.Equal(fiber.StatusOK, positiveResponse.Status)
@@ -183,7 +183,7 @@ func (s *ThreadHttpHandlerSuite) TestDeleteThread() {
 	s.NotNil(bodyString)
 	s.NotEmpty(bodyString)
 
-	var positiveResponse handler.PositiveResponseType
+	var positiveResponse handler.ResponseType
 	err = json.Unmarshal(bodyString, &positiveResponse)
 	s.NoError(err)
 	s.Equal(fiber.StatusOK, positiveResponse.Status)

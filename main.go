@@ -4,6 +4,7 @@ import (
 	"log"
 
 	handler "gofiber-api/httphandler"
+	midware "gofiber-api/middleware"
 	repo "gofiber-api/repository"
 	"gofiber-api/router"
 	service "gofiber-api/service"
@@ -22,6 +23,10 @@ func main() {
 
 	db := repo.Db{}
 	db.Init()
+
+	// middleware
+	errorHandlerMiddleware := midware.NewErrorHandlerMiddleware(app)
+	errorHandlerMiddleware.Bind()
 
 	threadService := service.NewThread(&db)
 	threadHandler := handler.NewThreadHandler(threadService)
