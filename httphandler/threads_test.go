@@ -166,3 +166,26 @@ func (s *ThreadHttpHandlerSuite) TestEditThread() {
 	s.Equal(fiber.StatusOK, positiveResponse.Status)
 	s.Equal("success edit thread", positiveResponse.Message)
 }
+
+func (s *ThreadHttpHandlerSuite) TestDeleteThread() {
+	s.Db.AddThread(context.Background(), "the-author-1", "the content 1")
+
+	threads := s.Db.GetThreads(context.Background())
+	s.Equal(1, len(threads))
+
+	req := httptest.NewRequest(fiber.MethodDelete, "/api/threads/0", nil)
+	resp, err := s.app.Test(req)
+	s.NoError(err)
+	s.Equal(fiber.StatusOK, resp.StatusCode)
+
+	bodyString, err := io.ReadAll(resp.Body)
+	s.Nil(err)
+	s.NotNil(bodyString)
+	s.NotEmpty(bodyString)
+
+	var positiveResponse handler.PositiveResponseType
+	err = json.Unmarshal(bodyString, &positiveResponse)
+	s.NoError(err)
+	s.Equal(fiber.StatusOK, positiveResponse.Status)
+	s.Equal("success delete thread", positiveResponse.Message)
+}

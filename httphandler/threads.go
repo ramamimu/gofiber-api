@@ -109,7 +109,7 @@ func (th *ThreadHandler) DeleteThread(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(PositiveResponseType{
-		Status:  fiber.StatusCreated,
+		Status:  fiber.StatusOK,
 		Message: "success delete thread",
 		Data:    nil,
 	})
