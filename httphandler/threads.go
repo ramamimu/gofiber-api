@@ -3,6 +3,7 @@ package httphandler
 import (
 	"context"
 	repo "gofiber-api/repository"
+	"sort"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -45,6 +46,10 @@ func NewThreadHandler(threadService HttpThreadHandlerRepo) *ThreadHandler {
 
 func (th *ThreadHandler) GetAllThreads(c *fiber.Ctx) error {
 	threads := th.GetAll(context.Background())
+	sort.SliceStable(threads, func(i, j int) bool {
+		return threads[i].LastUpdate.After(threads[j].LastUpdate)
+	})
+
 	return c.Status(fiber.StatusOK).JSON(PositiveResponseType{
 		Status:  fiber.StatusOK,
 		Message: "success get threads",
