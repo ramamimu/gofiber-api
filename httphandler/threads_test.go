@@ -14,6 +14,7 @@ import (
 
 	handler "gofiber-api/httphandler"
 	repo "gofiber-api/repository"
+	"gofiber-api/router"
 	service "gofiber-api/service"
 )
 
@@ -38,12 +39,10 @@ func (s *ThreadHttpHandlerSuite) SetupSuite() {
 
 	threadService := service.NewThread(&s.Db)
 	threadHandler := handler.NewThreadHandler(threadService)
+	threadRouter := router.NewThreadRoute(threadHandler)
 
 	api := s.app.Group("/api")
-	api.Get("/threads", threadHandler.GetAllThreads)
-	api.Post("/threads", threadHandler.CreateThread)
-	api.Put("/threads/:id", threadHandler.EditThread)
-	api.Delete("/threads/:id", threadHandler.DeleteThread)
+	threadRouter.Route(api)
 }
 
 func (s *ThreadHttpHandlerSuite) SetupTest() {
@@ -74,6 +73,7 @@ func (s *ThreadHttpHandlerSuite) TestCreateNewThread() {
 
 	resp, err := s.app.Test(req)
 	s.Nil(err)
+	s.Equal(fiber.StatusCreated, resp.StatusCode)
 
 	bodyString, err := io.ReadAll(resp.Body)
 	s.Nil(err)
@@ -108,6 +108,7 @@ func (s *ThreadHttpHandlerSuite) TestGetThreads() {
 	req := httptest.NewRequest(fiber.MethodGet, "/api/threads", nil)
 	resp, err := s.app.Test(req)
 	s.NoError(err)
+	s.Equal(fiber.StatusOK, resp.StatusCode)
 
 	bodyString, err := io.ReadAll(resp.Body)
 	s.Nil(err)
@@ -152,6 +153,7 @@ func (s *ThreadHttpHandlerSuite) TestEditThread() {
 
 	resp, err := s.app.Test(req)
 	s.NoError(err)
+	s.Equal(fiber.StatusOK, resp.StatusCode)
 
 	bodyString, err := io.ReadAll(resp.Body)
 	s.Nil(err)

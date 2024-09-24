@@ -94,8 +94,8 @@ func (th *ThreadHandler) EditThread(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(PositiveResponseType{
-		Status:  fiber.StatusCreated,
+	return c.Status(fiber.StatusOK).JSON(PositiveResponseType{
+		Status:  fiber.StatusOK,
 		Message: "success edit thread",
 		Data:    nil,
 	})
@@ -108,7 +108,7 @@ func (th *ThreadHandler) DeleteThread(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(PositiveResponseType{
+	return c.Status(fiber.StatusOK).JSON(PositiveResponseType{
 		Status:  fiber.StatusCreated,
 		Message: "success delete thread",
 		Data:    nil,

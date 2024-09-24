@@ -72,13 +72,14 @@ func (s *DbTestSuite) TestGetThread() {
 
 func (s *DbTestSuite) TestEditThread() {
 	// add thread to fb
-	s.db.AddThread(context.Background(), "the-author", "the contents")
-
-	// edit thread
-	err := s.db.EditThread(context.Background(), "0", "the edited content")
-	s.NoError(err)
+	s.db.AddThread(context.Background(), "the-author", "the contents for edit")
 
 	threads := s.db.GetThreads(context.Background())
+	// edit thread
+	err := s.db.EditThread(context.Background(), threads[0].ID, "the edited content")
+	s.NoError(err)
+
+	threads = s.db.GetThreads(context.Background())
 	s.NotEmpty(threads)
 	s.Equal(1, len(threads))
 	s.Equal("the-author", threads[0].Author)
